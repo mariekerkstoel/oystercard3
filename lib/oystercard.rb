@@ -7,7 +7,11 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise 'Balnce limit is £90, try again' if @balance + amount > LIMIT
+    raise "Balnce limit is £#{LIMIT}, try again" if @balance + amount > LIMIT
     @balance += amount
+  end
+
+  def deduct(amount)
+    @balance -= amount
   end
 end
