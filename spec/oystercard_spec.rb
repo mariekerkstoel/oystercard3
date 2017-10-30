@@ -7,4 +7,17 @@ describe Oystercard do
       expect(card.balance).to eq(0)
     end
   end
+
+  describe '#top_up' do
+    it 'should add the designated sum to the balance' do
+      card.top_up(5)
+      expect(card.balance).to eq(5)
+    end
+
+    it 'should add the designated sum to the balance' do
+      card.top_up(5)
+      card.top_up(5)
+      expect(card.balance).to eq(10)
+    end
+  end
 end
