@@ -37,19 +37,26 @@ describe Oystercard do
     it 'Should return in-journey if touched in ' do
       subject.top_up(5)
       subject.touch_in
-      expect(subject.in_journey).to eq true
+      expect(subject.in_journey?).to eq true
     end
     it 'should return not in journey if touched out' do
       subject.top_up(5)
       subject.touch_in
       subject.touch_out
-      expect(subject.in_journey).to eq false
+      expect(subject.in_journey?).to eq false
     end
     it "should tell me which entry station I'm touching in" do
       subject.top_up(60)
       subject.touch_in(station)
       expect(subject.entry_station).to eq(station)
     end
+    it 'Should change entry_station to nil when touched out' do
+      subject.top_up(60)
+      subject.touch_in(station)
+      subject.touch_out
+      expect(subject.entry_station).to eq(nil)
+    end
+
 
     it 'Should raise error if touch in with low funds' do
       expect { subject.touch_in }.to raise_error 'Not enough funds'
