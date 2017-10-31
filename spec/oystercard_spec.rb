@@ -29,15 +29,8 @@ describe Oystercard do
     end
   end
 
-  # describe '#deduct' do
-  #   it 'should deduct the specified amount from my balance' do
-  #     card.top_up(10)
-  #     card.deduct(2)
-  #     expect(card.balance).to eq 8
-  #   end
-  # end
-
   context 'Touching in and out' do
+
     it 'Should return in-journey if touched in ' do
       subject.top_up(5)
       subject.touch_in

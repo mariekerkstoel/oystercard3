@@ -15,7 +15,7 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise "Balnce limit is £#{LIMIT}, try again" if @balance + amount > LIMIT
+    raise "Balnce limit is £#{LIMIT}, try again" if full?(amount)
     @balance += amount
   end
 
@@ -35,6 +35,9 @@ class Oystercard
   end
 
   private
+  def full?(amount)
+    @balance + amount > LIMIT
+  end
 
   def store_journey
     @journey_list << {@entry_station => @exit_station}
