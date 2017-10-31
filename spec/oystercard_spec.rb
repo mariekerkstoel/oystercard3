@@ -8,7 +8,11 @@ describe Oystercard do
       expect(card.balance).to eq(0)
     end
   end
-
+  describe '#journey_list' do
+    it 'should return an empty array' do
+      expect(subject.journey_list).to eq []
+    end
+  end
   describe '#top_up' do
     it 'should add the designated sum to the balance' do
       card.top_up(5)
