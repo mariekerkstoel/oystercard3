@@ -30,6 +30,17 @@ describe Oystercard do
       card.deduct(2)
       expect(card.balance).to eq 8
     end
+  end
 
+  context 'Touching in and out' do
+    it 'Should return in-journey if touched in ' do
+      subject.touch_in
+      expect(subject.in_journey).to eq true
+    end
+    it "should return not in journey if touched out" do
+      subject.touch_in
+      subject.touch_out
+      expect(subject.in_journey).to eq false
+    end
   end
 end
