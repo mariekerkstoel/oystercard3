@@ -25,13 +25,13 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    it 'should deduct the specified amount from my balance' do
-      card.top_up(10)
-      card.deduct(2)
-      expect(card.balance).to eq 8
-    end
-  end
+  # describe '#deduct' do
+  #   it 'should deduct the specified amount from my balance' do
+  #     card.top_up(10)
+  #     card.deduct(2)
+  #     expect(card.balance).to eq 8
+  #   end
+  # end
 
   context 'Touching in and out' do
     it 'Should return in-journey if touched in ' do
@@ -56,7 +56,18 @@ describe Oystercard do
       subject.touch_out
       expect(subject.entry_station).to eq(nil)
     end
+    it "should tell me which exit station I'm touching out" do
+      subject.top_up(60)
+      subject.touch_out(station)
+      expect(subject.exit_station).to eq(station)
+    end
 
+    it 'should return an array of journeys' do
+      subject.top_up(60)
+      subject.touch_in(station)
+      subject.touch_out(station)
+      expect(subject.journey_list[-1]).to eq({station => station})
+    end
 
     it 'Should raise error if touch in with low funds' do
       expect { subject.touch_in }.to raise_error 'Not enough funds'
