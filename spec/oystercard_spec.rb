@@ -1,7 +1,8 @@
 require 'oystercard'
-
 describe Oystercard do
   let(:card) { described_class.new }
+  let(:station) { double :station }
+
   describe '#balance' do
     it 'should be initialized with a default value of £0' do
       expect(card.balance).to eq(0)
@@ -38,16 +39,20 @@ describe Oystercard do
       subject.touch_in
       expect(subject.in_journey).to eq true
     end
-    it "should return not in journey if touched out" do
+    it 'should return not in journey if touched out' do
       subject.top_up(5)
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey).to eq false
     end
-
-    it 'Should raise error if touch in with low funds' do
-      expect { subject.touch_in}.to raise_error("Not enough funds")
+    it "should tell me which entry station I'm touching in" do
+      subject.top_up(60)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq(station)
     end
 
+    it 'Should raise error if touch in with low funds' do
+      expect { subject.touch_in }.to raise_error 'Not enough funds'
+    end
   end
 end

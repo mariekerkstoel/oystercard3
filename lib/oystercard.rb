@@ -1,8 +1,8 @@
-# Something
+require_relative 'station'
+# comment
 class Oystercard
-
   attr_accessor :balance
-  attr_reader :in_journey
+  attr_reader :in_journey, :entry_station
 
   LIMIT = 90
   MIN_FUND = 1
@@ -10,6 +10,7 @@ class Oystercard
   def initialize
     @balance = 0
     @in_journey = false
+    @entry_station = nil
   end
 
   def top_up(amount)
@@ -21,8 +22,9 @@ class Oystercard
     @balance -= amount
   end
 
-  def touch_in
-    raise "Not enough funds" if low_funds
+  def touch_in(station = Station.new('Liverpool Street', 1))
+    raise 'Not enough funds' if low_funds
+    @entry_station = station
     @in_journey = true
   end
 
