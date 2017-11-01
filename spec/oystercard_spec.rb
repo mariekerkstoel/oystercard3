@@ -64,6 +64,8 @@ describe Oystercard do
         expect(subject.journey_list.last).to eq({entry: station, exit: station})
       end
       it 'should deduct fare from balance' do
+        card.top_up(6)
+        card.touch_in(station)
         expect { card.touch_out(station) }.to change { card.balance }.by(-Oystercard::MIN_FARE)
       end
     end
