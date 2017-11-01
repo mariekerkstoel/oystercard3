@@ -30,44 +30,44 @@ describe Oystercard do
   end
 
   context 'Touching in and out' do
+    describe '#touch_in' do
+      it 'Should return in-journey if touched in ' do
+        subject.top_up(5)
+        subject.touch_in(station)
+        expect(subject.in_journey?).to eq true
+      end
+      it 'Should raise error if touch in with low funds' do
+        expect { subject.touch_in(station) }.to raise_error 'Not enough funds'
+      end
+      it "should tell me which entry station I'm touching in" do
+        subject.top_up(60)
+        subject.touch_in(station)
+        expect(subject.entry_station).to eq(station)
+      end
+    end
+    describe '#touch_out' do
+      before { subject.top_up(5) }
+      before { subject.touch_in(station) }
 
-    it 'Should return in-journey if touched in ' do
-      subject.top_up(5)
-      subject.touch_in
-      expect(subject.in_journey?).to eq true
-    end
-    it 'should return not in journey if touched out' do
-      subject.top_up(5)
-      subject.touch_in
-      subject.touch_out
-      expect(subject.in_journey?).to eq false
-    end
-    it "should tell me which entry station I'm touching in" do
-      subject.top_up(60)
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq(station)
-    end
-    it 'Should change entry_station to nil when touched out' do
-      subject.top_up(60)
-      subject.touch_in(station)
-      subject.touch_out
-      expect(subject.entry_station).to eq(nil)
-    end
-    it "should tell me which exit station I'm touching out" do
-      subject.top_up(60)
-      subject.touch_out(station)
-      expect(subject.exit_station).to eq(station)
-    end
-
-    it 'should return an array of journeys' do
-      subject.top_up(60)
-      subject.touch_in(station)
-      subject.touch_out(station)
-      expect(subject.journey_list[-1]).to eq({station => station})
-    end
-
-    it 'Should raise error if touch in with low funds' do
-      expect { subject.touch_in }.to raise_error 'Not enough funds'
+      it 'should return not in journey if touched out' do
+        subject.touch_out(station)
+        expect(subject.in_journey?).to eq false
+      end
+      it 'Should change entry_station to nil when touched out' do
+        subject.touch_out(station)
+        expect(subject.entry_station).to eq(nil)
+      end
+      it "should tell me which exit station I'm touching out" do
+        subject.touch_out(station)
+        expect(subject.exit_station).to eq(station)
+      end
+      it 'should return an array of journeys' do
+        subject.touch_out(station)
+        expect(subject.journey_list[-1]).to eq({station => station})
+      end
+      it 'should deduct fare from balance' do
+        expect { card.touch_out(station) }.to change { card.balance }.by(-Oystercard::MIN_FARE)
+      end
     end
   end
 end

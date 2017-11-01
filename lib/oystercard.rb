@@ -5,7 +5,7 @@ class Oystercard
   attr_reader :entry_station, :exit_station, :journey_list
 
   LIMIT = 90
-  MIN_FUND = 1
+  MIN_FARE = 1
 
   def initialize
     @balance = 0
@@ -19,19 +19,20 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in(station = Station.new('Liverpool Street', 1))
+  def touch_in(station)
     raise 'Not enough funds' if low_funds
     @entry_station = station
   end
 
-  def touch_out(station = Station.new('Bowroad', 2))
+  def touch_out(station)
     @exit_station = station
     store_journey
     @entry_station = nil
+    deduct(MIN_FARE)
   end
 
   def in_journey?
-    !!@entry_station
+    @entry_station != nil
   end
 
   private
@@ -48,6 +49,6 @@ class Oystercard
   end
 
   def low_funds
-    MIN_FUND > @balance
+    MIN_FARE > @balance
   end
 end
