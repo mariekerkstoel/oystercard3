@@ -1,4 +1,5 @@
 require_relative 'station'
+require_relative "journey"
 # comment
 class Oystercard
   attr_accessor :balance
@@ -9,8 +10,6 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @entry_station = nil
-    @exit_station = nil
     @journey_list = []
   end
 
@@ -21,27 +20,21 @@ class Oystercard
 
   def touch_in(station)
     raise 'Not enough funds' if low_funds
-    @entry_station = station
+    @journey = Journey.new(station)
   end
 
   def touch_out(station)
-    @exit_station = station
-    store_journey
-    @entry_station = nil
     deduct(MIN_FARE)
+    @journey.finish_journey(station)
   end
 
   def in_journey?
-    @entry_station != nil
+    @journey.in_journey?
   end
 
   private
   def full?(amount)
     @balance + amount > LIMIT
-  end
-
-  def store_journey
-    @journey_list << {@entry_station => @exit_station}
   end
 
   def deduct(amount)
