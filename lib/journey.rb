@@ -4,6 +4,7 @@ class Journey
   def initialize(station)
     @entry_station = station
     @exit_station = nil
+    @journey = { entry: @entry_station, exit: @exit_station }
   end
 
   def finish_journey(station)
@@ -14,7 +15,7 @@ class Journey
   end
 
   def in_journey?
-    true unless entry_station == nil
+    @entry_station != nil ? true : false
   end
 
 end
