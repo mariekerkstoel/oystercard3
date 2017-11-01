@@ -1,4 +1,5 @@
 require 'oystercard'
+
 describe Oystercard do
   let(:card) { described_class.new }
   let(:station) { double :station }
@@ -10,7 +11,7 @@ describe Oystercard do
   end
   describe '#journey_list' do
     it 'should return an empty array' do
-      expect(subject.journey_list).to eq []
+      expect(subject.journey_list).to eq [{entry: nil, exit: nil}]
     end
   end
   describe '#top_up' do

@@ -2,7 +2,8 @@ require_relative '../lib/journey'
 
 describe Journey do
   let(:station) { double :station }
-  let(:journey) { described_class.new(station) }
+  let(:journey) { described_class.new }
+  before {journey.start(station)}
 
   describe "#initialize" do
     it 'should be initialized with an entry station' do
@@ -37,6 +38,12 @@ describe Journey do
 
     it "expects in_journey to be true when entry station is not nil" do
       expect(journey).to be_in_journey
+    end
+  end
+
+  describe "#fare" do
+    it 'should deduct penalty fare when forgot to touch out' do
+      
     end
   end
 
