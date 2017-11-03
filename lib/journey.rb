@@ -17,6 +17,6 @@ class Journey
   end
 
   def in_journey?
-    @entry_station != nil ? true : false
+    !!@entry_station
   end
 end

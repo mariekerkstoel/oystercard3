@@ -12,7 +12,7 @@ class Oystercard
   def initialize
     @balance = 0
     @journey = Journey.new
-    @journey_list = [entry: nil, exit: nil]
+    @journey_list = [{entry: nil, exit: nil}]
   end
 
   def top_up(amount)
@@ -27,9 +27,9 @@ class Oystercard
   end
 
   def touch_out(station)
+    fare_touch_out
     finishing_journey(station)
-    deduct(fare_touch_out)
-    deduct(MIN_FARE) if fare_touch_out == 0
+    # deduct(MIN_FARE) if fare_touch_out == 0
   end
 
   def in_journey?
@@ -40,26 +40,34 @@ class Oystercard
   private
 
   def fare_touch_in
-    if @journey_list.length == 1
-      0
-    elsif @journey_list.last[:exit] == nil && @journey_list.last[:entry] != nil
-      PENALTY_FARE
-    else
-      0
-    end
+    deduct(PENALTY_FARE) if in_journey?
+  end
+  def fare_touch_out
+    in_journey? ? deduct(MIN_FARE) : deduct(PENALTY_FARE)
   end
 
-  def fare_touch_out
-    if @journey_list.last[:exit] != nil && @journey_list.last[:entry] == nil
-      PENALTY_FARE
-    else
-      0
-    end
-  end
+
+  # def fare_touch_in
+  #   if @journey_list.length == 1
+  #     0
+  #   elsif @journey_list.last[:exit] == nil && @journey_list.last[:entry] != nil
+  #     PENALTY_FARE
+  #   else
+  #     0
+  #   end
+  # end
+
+  # def fare_touch_out
+  #   if @journey_list.last[:exit] != nil && @journey_list.last[:entry] == nil
+  #     PENALTY_FARE
+  #   else
+  #     0
+  #   end
+  # end
 
   def offenses
     raise 'Not enough funds' if low_funds
-    deduct(fare_touch_in)
+    fare_touch_in
   end
 
   def finishing_journey(station)
