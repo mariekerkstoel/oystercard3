@@ -51,6 +51,22 @@ describe Oystercard do
         expect(subject.journey_list.last[:exit]).to eq(nil)
       end
     end
+    describe '#fare_touch_in' do
+      it "should give a penalty if didn't touch out" do
+        card.top_up(60)
+        card.touch_in(station)
+        card.touch_in(station)
+        expect(card.balance).to eq 54
+      end
+    end
+    describe '#fare_touch_out' do
+      it "should give a penalty if didn't touch in" do
+        card.top_up(30)
+        # card.touch_out(station)
+        card.touch_out(station)
+        expect(card.balance).to eq 24
+      end
+    end
     describe '#touch_out' do
       before { subject.top_up(5) }
       before { subject.touch_in(station) }
